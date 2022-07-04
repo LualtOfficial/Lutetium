@@ -5,7 +5,6 @@ import numpy as np
 import cv2 as cv
 import icons
 
-
 # Globabl Variables
 cursor = [0, -12, -12]
 old_cursor = [-12, -12]
@@ -162,8 +161,6 @@ if __name__ == "__main__":
             img = icons.shutdown(img, (50+menu[0], 378), (150, 150, 150), (223, 232, 60))
         else:
             img = icons.shutdown(img, (50+menu[0], 378), (0, 0, 0), (223, 232, 60))
-        
-        
         
         # Trail
         if trail[1]:
