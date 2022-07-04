@@ -1,10 +1,8 @@
 from configparser import ConfigParser
+from os import system, listdir
 from datetime import datetime
-from time import sleep
-from os import system
 import numpy as np
 import cv2 as cv
-import keyboards
 import icons
 
 
@@ -15,7 +13,7 @@ menu = [-121, False]
 trail = [[], True]
 shutdown = False
 config = ConfigParser()
-backgrounds = [0, ["space", "sky", "logo"], False, False]
+backgrounds = [0, [], False, False]
 
 
 def mouse_callback(event, x, y, *args):
@@ -54,26 +52,26 @@ def mouse_callback(event, x, y, *args):
         if cursor[1] >= 0 and cursor[1] <= 20 and cursor[2] >= 200 and cursor[2] <= 220:
             if backgrounds[0] == 0:
                 backgrounds[0] = len(backgrounds[1]) - 1
-                background_img = cv.imread(f"/home/lualt/Lutetium/bg_{backgrounds[1][backgrounds[0]]}.png", -1)
+                background_img = cv.imread(f"/home/lualt/Lutetium/images/{backgrounds[1][backgrounds[0]]}", -1)
                 config["DEFAULT"]["background"] = str(backgrounds[0])
                 with open("/home/lualt/Lutetium/settings.ini", "w+") as file:
                     config.write(file)
             else:
                 backgrounds[0] -= 1
-                background_img = cv.imread(f"/home/lualt/Lutetium/bg_{backgrounds[1][backgrounds[0]]}.png", -1)
+                background_img = cv.imread(f"/home/lualt/Lutetium/images/{backgrounds[1][backgrounds[0]]}", -1)
                 config["DEFAULT"]["background"] = str(backgrounds[0])
                 with open("/home/lualt/Lutetium/settings.ini", "w+") as file:
                     config.write(file)
         elif cursor[1] >= 100 and cursor[1] <= 120 and cursor[2] >= 200 and cursor[2] <= 220:
             if backgrounds[0] == len(backgrounds[1]) - 1:
                 backgrounds[0] = 0
-                background_img = cv.imread(f"/home/lualt/Lutetium/bg_{backgrounds[1][backgrounds[0]]}.png", -1)
+                background_img = cv.imread(f"/home/lualt/Lutetium/images/{backgrounds[1][backgrounds[0]]}", -1)
                 config["DEFAULT"]["background"] = str(backgrounds[0])
                 with open("/home/lualt/Lutetium/settings.ini", "w+") as file:
                     config.write(file)
             else:
                 backgrounds[0] += 1
-                background_img = cv.imread(f"/home/lualt/Lutetium/bg_{backgrounds[1][backgrounds[0]]}.png", -1)
+                background_img = cv.imread(f"/home/lualt/Lutetium/images/{backgrounds[1][backgrounds[0]]}", -1)
                 config["DEFAULT"]["background"] = str(backgrounds[0])
                 with open("/home/lualt/Lutetium/settings.ini", "w+") as file:
                     config.write(file)   
@@ -104,8 +102,14 @@ if __name__ == "__main__":
     config.read("/home/lualt/Lutetium/settings.ini")
     trail[1] = True if config["DEFAULT"]["trail"] == "true" else False
     backgrounds[0] = int(config["DEFAULT"]["background"])
-    
-    background_img = cv.imread(f"/home/lualt/Lutetium/bg_{backgrounds[1][backgrounds[0]]}.png", -1)
+
+    background_imgs = listdir("/home/lualt/Lutetium/images")
+    for bg_img in background_imgs:
+        if bg_img[:3] == "bg_" and bg_img[-4:] == ".png":
+            backgrounds[1].append(bg_img)
+
+    print(f"/home/lualt/Lutetium/{backgrounds[1][backgrounds[0]]}")
+    background_img = cv.imread(f"/home/lualt/Lutetium/images/{backgrounds[1][backgrounds[0]]}", -1)
     blurred_frame = background_img.copy()
     
     while True:
@@ -151,8 +155,8 @@ if __name__ == "__main__":
             cv.fillPoly(img, [points], (150, 150, 150), lineType=16)
         else:
             cv.fillPoly(img, [points], (0, 0, 0), lineType=16)
-        text = cv.getTextSize(backgrounds[1][backgrounds[0]], 2, 0.7, 1)[0]
-        cv.putText(img, backgrounds[1][backgrounds[0]], (int(60 - text[0]/2)+menu[0], int(223 - text[1]/2)), 2, 0.7, (0, 0, 0), 1, 16)
+        text = cv.getTextSize(backgrounds[1][backgrounds[0]][3:-4], 2, 0.7, 1)[0]
+        cv.putText(img, backgrounds[1][backgrounds[0]][3:-4], (int(60 - text[0]/2)+menu[0], int(223 - text[1]/2)), 2, 0.7, (0, 0, 0), 1, 16)
             # Shutdown and Restart
         if shutdown:
             img = icons.shutdown(img, (50+menu[0], 378), (150, 150, 150), (223, 232, 60))
