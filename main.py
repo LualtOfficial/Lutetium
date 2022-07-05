@@ -115,7 +115,7 @@ if __name__ == "__main__":
         img = background_img.copy()
         
         #keyboards.numbers(img, (0, 320), (0, 0, 0), (245, 66, 90), (203, 245, 66))
-        
+
         # Menu
             # Blur
         if menu[1] and menu[0] == -121:
