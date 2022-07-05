@@ -56,7 +56,7 @@ def global_menu(img, cords, color, border, bg, hover, settings):
     msg = sock.recv()
     cursor = []
     for num in msg.split(b" "):
-        cursor.append(int(num))
+        cursor.append(int(num.decode()))
 
     points = np.array([[0+cords[0], 0+cords[1]], [120+cords[0], 40+cords[1]], [120+cords[0], 440+cords[1]], [0+cords[0], 480+cords[1]]])
     cv.polylines(img, [points], True, border, 3, 16)
@@ -89,4 +89,6 @@ def global_menu(img, cords, color, border, bg, hover, settings):
     if 37+cords[0] <= cursor[1] <= 82+cords[0] and 381+cords[1] <= cursor[2] <= 421+cords[1]:
         img = shutdown(img, (50+cords[0], 378+cords[1]), hover, bg)
     else:
-        img = shutdown(img, (50+cords[0], 378)+cords[1], color, bg)
+        img = shutdown(img, (50+cords[0], 378+cords[1]), color, bg)
+
+    return img
