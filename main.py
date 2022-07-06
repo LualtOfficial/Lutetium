@@ -33,8 +33,10 @@ def tcp_server():
         if msg == b"get_cursor":
             sock.send(" ".join([str(num) for num in CURSOR]).encode())
         elif msg == b"set_frame":
+            sock.send(b"1")
             resp = sock.recv()
-            FRAME = resp
+            if not menu[0]:
+                FRAME = np.frombuffer(resp, dtype=np.uint8).reshape((480, 800, 3))
             sock.send(b"1")
         else:
             sock.send(b"0")
@@ -134,7 +136,7 @@ if __name__ == "__main__":
             cv.polylines(img, [points], False, (0, 0, 0), 3, 16)
             cv.polylines(img, [points], False, (255, 255, 255), 1, 16)
 
-        cv.circle(img, (cursor[0], cursor[1]), 12, (0, 0, 0), -1, 16)
+        cv.circle(img, (cursor[0], cursor[1]), 12, (0, 0, 0), 2, 16)
         cv.circle(img, (cursor[0], cursor[1]), 10, (255, 255, 255), -1, 16)
 
         img = cv.rotate(img, 0)
