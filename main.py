@@ -37,7 +37,7 @@ def tcp_server():
 
 
 def cursor_callback(event, x, y, *_):
-    global cursor, trail, settings, CURSOR, hover, FRAME
+    global cursor, trail, settings, CURSOR, hover, FRAME, backgrounds
 
     cursor = [y, 480-x, event]
 
@@ -67,6 +67,11 @@ def cursor_callback(event, x, y, *_):
         elif 37 <= cursor[0] <= 82 and 381 <= cursor[1] <= 421:
             exit()
         elif 0 <= cursor[0] <= 20 and 200 <= cursor[1] <= 220:
+            backgrounds[1].clear()
+            for bg_img in listdir("/home/lualt/Lutetium/images/"):
+                if bg_img[:3] == "bg_":
+                    backgrounds[1].append(bg_img)
+            backgrounds[0] = backgrounds[1].index(settings["background"])
             if backgrounds[0] == 0:
                 backgrounds[0] = len(backgrounds[1]) - 1
             else:
@@ -75,6 +80,11 @@ def cursor_callback(event, x, y, *_):
             config.write(settings)
             FRAME = cv.GaussianBlur(cv.imread("/home/lualt/Lutetium/images/" + settings["background"]), (31, 31), 0)
         elif 100 <= cursor[0] <= 120 and 200 <= cursor[1] <= 220:
+            backgrounds[1].clear()
+            for bg_img in listdir("/home/lualt/Lutetium/images/"):
+                if bg_img[:3] == "bg_":
+                    backgrounds[1].append(bg_img)
+            backgrounds[0] = backgrounds[1].index(settings["background"])
             if backgrounds[0] == len(backgrounds[1]) - 1:
                 backgrounds[0] = 0
             else:
