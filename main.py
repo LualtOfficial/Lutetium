@@ -32,8 +32,12 @@ def tcp_server():
         msg = sock.recv()
         if msg == b"get_cursor":
             sock.send(" ".join([str(num) for num in CURSOR]).encode())
+        elif msg == b"set_frame":
+            resp = sock.recv()
+            FRAME = resp
+            sock.send(b"1")
         else:
-            sock.send(b"")
+            sock.send(b"0")
 
 
 def cursor_callback(event, x, y, *_):
