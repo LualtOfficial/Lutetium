@@ -8,11 +8,11 @@ sock.connect("tcp://localhost:32123")
 
 img = np.zeros((480, 800, 3), np.uint8)
 cv.putText(img, "Test", (50, 50), 2, 0.8, (255, 255, 255), 1, 16)
+cursor = (-12, -12, 0)
 
 while True:
     sock.send(b"get_cursor")
     resp = sock.recv().decode().split(" ")
-    print(resp)
     cursor = (int(resp[0]), int(resp[1]), int(resp[2]))
 
     cv.circle(img, (cursor[0], cursor[1]), 16, (150, 150, 150), -1, 16)
@@ -20,4 +20,4 @@ while True:
     sock.send(b"set_frame")
     if sock.recv() == b"1":
         sock.send(img.tobytes())
-        print(sock.recv())
+        sock.recv()
