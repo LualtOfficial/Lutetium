@@ -119,6 +119,8 @@ if __name__ == "__main__":
     while True:
         img = FRAME.copy()
 
+        img = graphics.app(img, (100, 100), "test", (255, 255, 255))
+
         if menu[0] and menu[1] == -120:
             FRAME = cv.GaussianBlur(FRAME, (31, 31), 0)
         elif not menu[0] and menu[1] == 0:

@@ -83,3 +83,10 @@ def global_menu(img, cords, color, border, bg, hover, settings, hovers):
         img = shutdown(img, (50+cords[0], 378+cords[1]), color, bg)
 
     return img
+
+
+def app(img, cords, icon, color):
+    icon = cv.imread(f"/home/lualt/Lutetium/images/icon_{icon}.png")
+    img[cords[0]:cords[0]+64, cords[1]:cords[1]+64] = icon
+
+    return img
