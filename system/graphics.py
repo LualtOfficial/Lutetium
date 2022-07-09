@@ -35,7 +35,7 @@ def keyboard(img, cords, color):
 def slider_left(img, cords, color, bg):
     cv.circle(img, (16+cords[0], 16+cords[1]), 16, bg, -1, 16)
     cv.circle(img, (56+cords[0], 16+cords[1]), 16, bg, -1, 16)
-    cv.rectangle(img, (16+cords[0], 0+cords[1]), (56+cords[0], 32+cords[1]), bg,-1, 16)
+    cv.rectangle(img, (16+cords[0], 0+cords[1]), (56+cords[0], 32+cords[1]), bg, -1, 16)
     cv.circle(img, (16+cords[0], 16+cords[1]), 12, color, -1, 16)
     return img
 
@@ -48,7 +48,7 @@ def slider_right(img, cords, color, bg):
     return img
 
 
-def global_menu(img, cords, color, border, bg, hover, settings, hovers):
+def global_menu(img, cords, color, border, bg, hover, settings, hovers, quit_icon):
     points = np.array([[0+cords[0], 0+cords[1]], [120+cords[0], 40+cords[1]], [120+cords[0], 440+cords[1]], [0+cords[0], 480+cords[1]]])
     cv.polylines(img, [points], True, border, 3, 16)
     cv.fillPoly(img, [points], bg, lineType=16)
@@ -77,6 +77,12 @@ def global_menu(img, cords, color, border, bg, hover, settings, hovers):
     text = cv.getTextSize(settings["background"][3:-4], 2, 0.7, 1)[0]
     cv.putText(img, settings["background"][3:-4], (int(60 - text[0] / 2)+cords[0], int(223 - text[1] / 2)+cords[1]), 2, 0.7, (0, 0, 0), 1, 16)
 
+    if quit_icon:
+        if hovers[3]:
+            img = exit_icon(img, (37+cords[0], 300+cords[1]), hover, bg)
+        else:
+            img = exit_icon(img, (37 + cords[0], 300 + cords[1]), color, bg)
+
     if hovers[0]:
         img = shutdown(img, (50+cords[0], 378+cords[1]), hover, bg)
     else:
@@ -85,8 +91,18 @@ def global_menu(img, cords, color, border, bg, hover, settings, hovers):
     return img
 
 
-def app(img, cords, icon, color):
-    icon = cv.imread(f"/home/lualt/Lutetium/images/icon_{icon}.png")
+def app(img, cords, application):
+    icon = cv.imread(f"/home/lualt/Lutetium/apps/{application}/icon.png")
     img[cords[0]:cords[0]+64, cords[1]:cords[1]+64] = icon
+
+    return img
+
+
+def exit_icon(img, cords, color, bg):
+    cv.rectangle(img, (5+cords[0], 0+cords[1]), (40+cords[0], 50+cords[1]), color, 3, 16)
+    cv.line(img, (20+cords[0], 25+cords[1]), (60+cords[0], 25+cords[1]), bg, 20)
+    cv.line(img, (20+cords[0], 25+cords[1]), (60+cords[0], 25+cords[1]), color, 3)
+    cv.line(img, (60+cords[0], 25+cords[1]), (50+cords[0], 15+cords[1]), color, 3)
+    cv.line(img, (60+cords[0], 25+cords[1]), (50+cords[0], 35+cords[1]), color, 3)
 
     return img
